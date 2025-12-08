@@ -1,22 +1,180 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<title>UIDE Transporte</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>UIDE — Movilidad Estudiantil</title>
+<link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <header>
-        <h1>UIDE Transporte Estudiantil</h1>
-        <p>Sistema experimental de movilidad para estudiantes UIDE.</p>
+  <div id="app">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="top-left"></div>
+      <div class="top-center">
+        <!-- UIDE logo (inline SVG) -->
+        <div class="logo-wrap" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect rx="12" width="100" height="100" fill="#0b6e4f"/>
+            <text x="50" y="58" font-size="34" fill="#fff" font-family="Arial, sans-serif" text-anchor="middle">UIDE</text>
+          </svg>
+        </div>
+        <div class="title">Movilidad Estudiantil</div>
+      </div>
+
+      <div class="top-right">
+        <button id="btn-register" class="btn small">Registrarse / Ingresar</button>
+      </div>
     </header>
 
-    <main>
-        <a class="btn" href="rutas.html">Ver rutas disponibles</a>
+    <!-- Left vertical controls -->
+    <nav class="left-rail" role="navigation" aria-label="Ofrezco o Busco viaje">
+      <button id="btn-ofrezco" class="rail-btn">Ofrezco viaje</button>
+      <button id="btn-busco" class="rail-btn">Busco viaje</button>
+    </nav>
+
+    <!-- Main content area -->
+    <main class="main">
+      <section class="hero">
+        <!-- representative image (simple inline SVG illustration) -->
+        <div class="hero-image" aria-hidden="true">
+          <svg viewBox="0 0 200 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="120" rx="12" fill="#e6f4ef"/>
+            <g transform="translate(12,18)">
+              <rect width="60" height="36" rx="6" fill="#0b6e4f"/>
+              <text x="30" y="22" text-anchor="middle" fill="#fff" font-size="10" font-family="Arial">Movilidad UIDE</text>
+              <circle cx="130" cy="70" r="12" fill="#0b6e4f"/>
+              <rect x="100" y="40" width="60" height="24" rx="6" fill="#62b68a"/>
+              <text x="130" y="56" text-anchor="middle" fill="#05331f" font-size="8">Comparte viajes</text>
+            </g>
+          </svg>
+        </div>
+        <div class="hero-text">
+          <h2>Comparte y encuentra viajes con compañeros UIDE</h2>
+          <p>Regístrate con tu correo institucional @uide.edu.ec para ofrecer o buscar viajes. Todo se guarda en tu navegador (local).</p>
+        </div>
+      </section>
+
+      <!-- Forms container -->
+      <section class="form-area">
+        <!-- Ofrezco Form -->
+        <article id="form-ofrezco" class="card hidden">
+          <h3>Ofrezco viaje</h3>
+          <form id="ofrezco-form">
+            <label>Correo institucional</label>
+            <input name="email" type="email" placeholder="tu.nombre@uide.edu.ec" required />
+
+            <label>Nombre y apellido</label>
+            <input name="fullname" type="text" placeholder="Ej. Juan Pérez" required />
+
+            <label>Edad</label>
+            <input name="age" type="number" min="16" placeholder="Edad" required />
+
+            <label>Carrera</label>
+            <input name="career" type="text" placeholder="Ej. Arquitectura" required />
+
+            <fieldset class="car-fieldset">
+              <legend>Datos del carro</legend>
+              <label>Color</label>
+              <input name="car_color" type="text" placeholder="Color" required />
+
+              <label>Placa</label>
+              <input name="car_plate" type="text" placeholder="ABC-1234" required />
+
+              <label>Modelo</label>
+              <input name="car_model" type="text" placeholder="Ej. Toyota Corolla" required />
+
+              <label>Matrícula</label>
+              <input name="car_registration" type="text" placeholder="Número matrícula" required />
+
+              <label>Licencia</label>
+              <input name="car_license" type="text" placeholder="Número de licencia" required />
+            </fieldset>
+
+            <label>Dirección / Mensaje (a dónde te diriges, horario, puntos de encuentro)</label>
+            <textarea name="message" rows="3" placeholder="Ej. Av. Naciones Unidas 1200 — Salida 17:30"></textarea>
+
+            <label>Valor acordado (efectivo) — sugerido</label>
+            <input name="price" type="number" min="0" step="0.01" placeholder="Ej. 2.50" required />
+
+            <div class="form-actions">
+              <button type="submit" class="btn">Publicar oferta</button>
+              <button type="button" id="ofrezco-cancel" class="btn secondary">Cancelar</button>
+            </div>
+          </form>
+        </article>
+
+        <!-- Busco Form -->
+        <article id="form-busco" class="card hidden">
+          <h3>Busco viaje</h3>
+          <form id="busco-form">
+            <label>Correo institucional</label>
+            <input name="email" type="email" placeholder="tu.nombre@uide.edu.ec" required />
+
+            <label>Nombre y apellido</label>
+            <input name="fullname" type="text" placeholder="Ej. María López" required />
+
+            <label>Edad</label>
+            <input name="age" type="number" min="16" placeholder="Edad" required />
+
+            <label>Carrera</label>
+            <input name="career" type="text" placeholder="Ej. Medicina" required />
+
+            <label>Mensaje (dónde te diriges / horario deseado)</label>
+            <textarea name="message" rows="3" placeholder="Ej. Sector norte / necesito salida 07:30"></textarea>
+
+            <label>Valor acordado (máximo que pagarías en efectivo)</label>
+            <input name="price" type="number" min="0" step="0.01" placeholder="Ej. 2.00" required />
+
+            <div class="form-actions">
+              <button type="submit" class="btn">Publicar búsqueda</button>
+              <button type="button" id="busco-cancel" class="btn secondary">Cancelar</button>
+            </div>
+          </form>
+        </article>
+
+        <!-- Listings -->
+        <article id="listings" class="card">
+          <h3>Viajes publicados</h3>
+
+          <div class="list-columns">
+            <div>
+              <h4>Ofertas (conductores)</h4>
+              <ul id="offers-list" class="list"></ul>
+            </div>
+
+            <div>
+              <h4>Solicitudes (pasajeros)</h4>
+              <ul id="requests-list" class="list"></ul>
+            </div>
+          </div>
+          <div class="hint">Acción: Aceptar = acuerdan precio en efectivo; Cancelar = eliminar publicación.</div>
+        </article>
+      </section>
+
     </main>
 
-    <script src="app.js"></script>
+    <footer class="foot">
+      <small>Proyecto experimental — Datos simulados — UIDE</small>
+    </footer>
+  </div>
+
+  <!-- Register modal -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <h3 id="modal-title">Registro / Ingreso</h3>
+      <form id="register-form">
+        <label>Correo institucional @uide.edu.ec</label>
+        <input name="email" type="email" placeholder="tu.nombre@uide.edu.ec" required />
+        <div class="modal-actions">
+          <button type="submit" class="btn">Ingresar</button>
+          <button type="button" id="modal-close" class="btn secondary">Cerrar</button>
+        </div>
+      </form>
+      <div id="current-user" class="current-user"></div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
 </body>
 </html>
