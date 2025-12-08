@@ -34,15 +34,23 @@
 
   // Render usuario
   function renderUser(){
-    if(user && user.email){
-      currentUserDiv.textContent = `Conectado: ${user.email}`;
-      btnRegister.textContent = 'Cuenta: ' + user.email.split('@')[0];
-    } else {
-      currentUserDiv.textContent = '';
-      btnRegister.textContent = 'Registrarse / Ingresar';
-    }
-    console.log("Usuario renderizado:", user);
+  if(user && user.email){
+    currentUserDiv.textContent = `Conectado: ${user.email}`;
+    btnRegister.textContent = 'Cuenta: ' + user.email.split('@')[0];
+    
+    // 🔹 Habilitar botones de viaje
+    btnOfrezco.disabled = false;
+    btnBusco.disabled = false;
+  } else {
+    currentUserDiv.textContent = '';
+    btnRegister.textContent = 'Registrarse / Ingresar';
+    
+    // 🔹 Deshabilitar botones si no hay usuario
+    btnOfrezco.disabled = true;
+    btnBusco.disabled = true;
   }
+  console.log("Usuario renderizado:", user);
+}
 
   // Render listas
   function renderOffers(){
@@ -235,3 +243,4 @@
   renderOffers();
   renderRequests();
 })();
+
