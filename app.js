@@ -15,13 +15,55 @@ const requestsList = $("requests-list");
 const confirmationsBox = $("confirmations");
 const confirmationsList = $("confirmations-list");
 
+// ---------- MODAL LOGIN ----------
+const btnRegister = $("btn-register");
+const modal = $("modal");
+const modalClose = $("modal-close");
+const registerForm = $("register-form");
+const currentUserBox = $("current-user");
+
 // ---------- USUARIO ----------
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+renderCurrentUser();
 
 // ---------- STORAGE ----------
 let offers = JSON.parse(localStorage.getItem("offers")) || [];
 let requests = JSON.parse(localStorage.getItem("requests")) || [];
 let confirmations = JSON.parse(localStorage.getItem("confirmations")) || [];
+
+// ---------- LOGIN ----------
+btnRegister.onclick = () => {
+  modal.classList.remove("hidden");
+};
+
+modalClose.onclick = () => {
+  modal.classList.add("hidden");
+};
+
+registerForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = registerForm.email.value.trim();
+
+  if (!email.endsWith("@uide.edu.ec")) {
+    alert("⚠️ Usa tu correo institucional @uide.edu.ec");
+    return;
+  }
+
+  currentUser = { email, at: Date.now() };
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+  alert("✅ Registro simulado exitoso");
+  renderCurrentUser();
+  modal.classList.add("hidden");
+  registerForm.reset();
+});
+
+function renderCurrentUser() {
+  if (currentUser) {
+    currentUserBox.textContent = `Conectado: ${currentUser.email}`;
+    btnRegister.textContent = "Cuenta";
+  }
+}
 
 // ---------- VISIBILIDAD ----------
 btnOfrezco.onclick = () => {
@@ -66,7 +108,6 @@ function renderOffers() {
     li.innerHTML = `
       <strong>${o.fullname}</strong>
       <span class="meta">${o.career} · ${o.age} años</span>
-      <span class="meta">🚗 ${o.car_model} (${o.car_color})</span>
       <span>${o.message}</span>
       <span><b>💵 $${o.price}</b></span>
       <div class="actions">
@@ -104,24 +145,14 @@ window.acceptOffer = (id) => {
   }
 
   const offer = offers.find(o => o.id === id);
-  if (!offer) return;
-
-  const confirmation = {
-    driver: offer.fullname,
-    driverEmail: offer.email,
-    passenger: currentUser.email,
-    passengerEmail: currentUser.email,
-    price: offer.price
-  };
-
-  confirmations.push(confirmation);
-  localStorage.setItem("confirmations", JSON.stringify(confirmations));
+  confirmations.push({
+    conductor: offer.fullname,
+    pasajero: currentUser.email,
+    precio: offer.price
+  });
 
   offers = offers.filter(o => o.id !== id);
-  localStorage.setItem("offers", JSON.stringify(offers));
-
-  renderOffers();
-  renderConfirmations();
+  saveAll();
 };
 
 window.acceptRequest = (id) => {
@@ -131,40 +162,27 @@ window.acceptRequest = (id) => {
   }
 
   const req = requests.find(r => r.id === id);
-  if (!req) return;
-
-  const confirmation = {
-    driver: currentUser.email,
-    driverEmail: currentUser.email,
-    passenger: req.fullname,
-    passengerEmail: req.email,
-    price: req.price
-  };
-
-  confirmations.push(confirmation);
-  localStorage.setItem("confirmations", JSON.stringify(confirmations));
+  confirmations.push({
+    conductor: currentUser.email,
+    pasajero: req.fullname,
+    precio: req.price
+  });
 
   requests = requests.filter(r => r.id !== id);
-  localStorage.setItem("requests", JSON.stringify(requests));
-
-  renderRequests();
-  renderConfirmations();
+  saveAll();
 };
 
 // ---------- CONFIRMACIONES ----------
 function renderConfirmations() {
   confirmationsBox.classList.remove("hidden");
   confirmationsList.innerHTML = "";
-
   confirmations.forEach(c => {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>✅ Viaje confirmado</strong>
-      <span>🚗 Conductor: ${c.driver}</span>
-      <span>📧 ${c.driverEmail}</span>
-      <span>🧍 Pasajero: ${c.passenger}</span>
-      <span>📧 ${c.passengerEmail}</span>
-      <span><b>💵 $${c.price}</b></span>
+      <span>🚗 ${c.conductor}</span>
+      <span>🧍 ${c.pasajero}</span>
+      <span><b>💵 $${c.precio}</b></span>
     `;
     confirmationsList.appendChild(li);
   });
@@ -173,15 +191,22 @@ function renderConfirmations() {
 // ---------- REMOVE ----------
 window.removeOffer = (id) => {
   offers = offers.filter(o => o.id !== id);
-  localStorage.setItem("offers", JSON.stringify(offers));
-  renderOffers();
+  saveAll();
 };
 
 window.removeRequest = (id) => {
   requests = requests.filter(r => r.id !== id);
-  localStorage.setItem("requests", JSON.stringify(requests));
-  renderRequests();
+  saveAll();
 };
+
+function saveAll() {
+  localStorage.setItem("offers", JSON.stringify(offers));
+  localStorage.setItem("requests", JSON.stringify(requests));
+  localStorage.setItem("confirmations", JSON.stringify(confirmations));
+  renderOffers();
+  renderRequests();
+  renderConfirmations();
+}
 
 // ---------- INIT ----------
 renderOffers();
