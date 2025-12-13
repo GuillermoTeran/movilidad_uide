@@ -1,211 +1,114 @@
-(() => {
-  console.log("🚀 App UIDE Movilidad iniciando...");
+console.log("🚀 App UIDE Movilidad iniciando...");
 
-  /* =====================
-     UTILIDADES
-  ====================== */
-  const $ = (s) => document.querySelector(s);
-  const LS = {
-    get: (k, d) => {
-      try { return JSON.parse(localStorage.getItem(k)) ?? d; }
-      catch { return d; }
-    },
-    set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
-  };
-  const isUideEmail = (e) => /@uide\.edu\.ec$/i.test(e.trim());
+const $ = (id) => document.getElementById(id);
 
-  /* =====================
-     ELEMENTOS
-  ====================== */
-  const btnRegister = $('#btn-register');
-  const btnOfrezco = $('#btn-ofrezco');
-  const btnBusco = $('#btn-busco');
-  const modal = $('#modal');
-  const modalClose = $('#modal-close');
-  const registerForm = $('#register-form');
-  const currentUserDiv = $('#current-user');
+// ---------- ELEMENTOS ----------
+const btnOfrezco = $("btn-ofrezco");
+const btnBusco = $("btn-busco");
+const formOfrezcoBox = $("form-ofrezco");
+const formBuscoBox = $("form-busco");
+const ofrezcoForm = $("ofrezco-form");
+const buscoForm = $("busco-form");
 
-  const formOfrezcoWrap = $('#form-ofrezco');
-  const formBuscoWrap = $('#form-busco');
-  const ofrezcoForm = $('#ofrezco-form');
-  const buscoForm = $('#busco-form');
+const offersList = $("offers-list");
+const requestsList = $("requests-list");
 
-  const offersList = $('#offers-list');
-  const requestsList = $('#requests-list');
+// ---------- STORAGE ----------
+let offers = JSON.parse(localStorage.getItem("offers")) || [];
+let requests = JSON.parse(localStorage.getItem("requests")) || [];
 
-  /* =====================
-     ESTADO
-  ====================== */
-  let user = LS.get('uide_user', null);
-  let offers = LS.get('uide_offers', []);
-  let requests = LS.get('uide_requests', []);
+// ---------- VISIBILIDAD ----------
+btnOfrezco.onclick = () => {
+  formOfrezcoBox.classList.remove("hidden");
+  formBuscoBox.classList.add("hidden");
+};
 
-  /* =====================
-     RENDER USUARIO
-  ====================== */
-  function renderUser() {
-    if (user && user.email) {
-      currentUserDiv.textContent = `Cuenta: ${user.email}`;
-      btnRegister.textContent = 'Cuenta';
+btnBusco.onclick = () => {
+  formBuscoBox.classList.remove("hidden");
+  formOfrezcoBox.classList.add("hidden");
+};
 
-      // 🔓 HABILITAR BOTONES
-      btnOfrezco.disabled = false;
-      btnBusco.disabled = false;
-      btnOfrezco.classList.remove('disabled');
-      btnBusco.classList.remove('disabled');
-    } else {
-      currentUserDiv.textContent = '';
-      btnRegister.textContent = 'Registro';
+// ---------- SUBMIT OFREZCO ----------
+ofrezcoForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-      // 🔒 DESHABILITAR BOTONES
-      btnOfrezco.disabled = true;
-      btnBusco.disabled = true;
-      btnOfrezco.classList.add('disabled');
-      btnBusco.classList.add('disabled');
-    }
-    console.log("👤 Usuario renderizado:", user);
-  }
+  const data = Object.fromEntries(new FormData(ofrezcoForm));
+  data.id = Date.now();
 
-  /* =====================
-     RENDER LISTAS
-  ====================== */
-  function renderOffers() {
-    offersList.innerHTML = '';
-    if (offers.length === 0) {
-      offersList.innerHTML = '<li class="empty">No hay ofertas publicadas</li>';
-      return;
-    }
+  offers.push(data);
+  localStorage.setItem("offers", JSON.stringify(offers));
 
-    offers.forEach(o => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>${o.fullname}</strong>
-        <div>${o.message}</div>
-        <div>💵 $${o.price}</div>
-        <button class="btn small">Aceptar</button>
-      `;
-      offersList.appendChild(li);
-    });
-  }
+  ofrezcoForm.reset();
+  formOfrezcoBox.classList.add("hidden");
 
-  function renderRequests() {
-    requestsList.innerHTML = '';
-    if (requests.length === 0) {
-      requestsList.innerHTML = '<li class="empty">No hay solicitudes publicadas</li>';
-      return;
-    }
-
-    requests.forEach(r => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>${r.fullname}</strong>
-        <div>${r.message}</div>
-        <div>💵 $${r.price}</div>
-        <button class="btn small">Aceptar</button>
-      `;
-      requestsList.appendChild(li);
-    });
-  }
-
-  /* =====================
-     MODAL REGISTRO
-  ====================== */
-  function openModal() {
-    modal.classList.remove('hidden');
-  }
-  function closeModal() {
-    modal.classList.add('hidden');
-  }
-
-  btnRegister.onclick = openModal;
-  modalClose.onclick = closeModal;
-  modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-
-  registerForm.onsubmit = (e) => {
-    e.preventDefault();
-    const email = registerForm.email.value.trim().toLowerCase();
-    console.log("📧 Intento registro:", email);
-
-    if (!isUideEmail(email)) {
-      alert('Usa un correo institucional @uide.edu.ec');
-      return;
-    }
-
-    user = { email, at: Date.now() };
-    LS.set('uide_user', user);
-
-    alert('Registro simulado exitoso!');
-    closeModal();
-    renderUser();
-  };
-
-  /* =====================
-     BOTONES LATERALES
-  ====================== */
-  btnOfrezco.onclick = () => {
-    if (!user) return;
-    formBuscoWrap.classList.add('hidden');
-    formOfrezcoWrap.classList.toggle('hidden');
-  };
-
-  btnBusco.onclick = () => {
-    if (!user) return;
-    formOfrezcoWrap.classList.add('hidden');
-    formBuscoWrap.classList.toggle('hidden');
-  };
-
-  /* =====================
-     FORM OFREZCO
-  ====================== */
-  ofrezcoForm.onsubmit = (e) => {
-    e.preventDefault();
-    const f = new FormData(ofrezcoForm);
-
-    const offer = {
-      email: f.get('email'),
-      fullname: f.get('fullname'),
-      age: f.get('age'),
-      career: f.get('career'),
-      message: f.get('message'),
-      price: f.get('price')
-    };
-
-    offers.push(offer);
-    LS.set('uide_offers', offers);
-
-    ofrezcoForm.reset();
-    formOfrezcoWrap.classList.add('hidden');
-    renderOffers();
-  };
-
-  /* =====================
-     FORM BUSCO
-  ====================== */
-  buscoForm.onsubmit = (e) => {
-    e.preventDefault();
-    const f = new FormData(buscoForm);
-
-    const req = {
-      email: f.get('email'),
-      fullname: f.get('fullname'),
-      age: f.get('age'),
-      career: f.get('career'),
-      message: f.get('message'),
-      price: f.get('price')
-    };
-
-    requests.push(req);
-    LS.set('uide_requests', requests);
-
-    buscoForm.reset();
-    formBuscoWrap.classList.add('hidden');
-    renderRequests();
-  };
-
-  /* =====================
-     INIT
-  ====================== */
-  renderUser();
   renderOffers();
+});
+
+// ---------- SUBMIT BUSCO ----------
+buscoForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(buscoForm));
+  data.id = Date.now();
+
+  requests.push(data);
+  localStorage.setItem("requests", JSON.stringify(requests));
+
+  buscoForm.reset();
+  formBuscoBox.classList.add("hidden");
+
   renderRequests();
-})();
+});
+
+// ---------- RENDER ----------
+function renderOffers() {
+  offersList.innerHTML = "";
+  offers.forEach((o) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${o.fullname}</strong>
+      <span class="meta">${o.career} · ${o.age} años</span>
+      <span class="meta">🚗 ${o.car_model} (${o.car_color})</span>
+      <span>${o.message}</span>
+      <span><b>💵 $${o.price}</b></span>
+      <div class="actions">
+        <button class="btn secondary" onclick="removeOffer(${o.id})">Cancelar</button>
+      </div>
+    `;
+    offersList.appendChild(li);
+  });
+}
+
+function renderRequests() {
+  requestsList.innerHTML = "";
+  requests.forEach((r) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${r.fullname}</strong>
+      <span class="meta">${r.career} · ${r.age} años</span>
+      <span>${r.message}</span>
+      <span><b>💵 $${r.price}</b></span>
+      <div class="actions">
+        <button class="btn secondary" onclick="removeRequest(${r.id})">Cancelar</button>
+      </div>
+    `;
+    requestsList.appendChild(li);
+  });
+}
+
+// ---------- REMOVE ----------
+window.removeOffer = (id) => {
+  offers = offers.filter(o => o.id !== id);
+  localStorage.setItem("offers", JSON.stringify(offers));
+  renderOffers();
+};
+
+window.removeRequest = (id) => {
+  requests = requests.filter(r => r.id !== id);
+  localStorage.setItem("requests", JSON.stringify(requests));
+  renderRequests();
+};
+
+// ---------- INIT ----------
+renderOffers();
+renderRequests();
