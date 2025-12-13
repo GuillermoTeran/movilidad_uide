@@ -25,7 +25,10 @@
       <div class="title">Movilidad Estudiantil</div>
     </div>
 
-    <button id="btn-register" class="btn small">Registrarse / Ingresar</button>
+    <div>
+      <button id="btn-register" class="btn small">Registrarse / Ingresar</button>
+      <span id="current-user" class="current-user"></span>
+    </div>
   </header>
 
   <!-- LEFT RAIL -->
@@ -140,6 +143,28 @@
     <small>Proyecto experimental — Datos simulados — UIDE</small>
   </footer>
 
+</div>
+
+<!-- MODAL LOGIN -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <button id="modal-close" class="modal-close">✕</button>
+    <h3>Registro / Ingreso UIDE</h3>
+
+    <form id="register-form">
+      <input
+        type="email"
+        name="email"
+        placeholder="correo@uide.edu.ec"
+        required
+      />
+      <button class="btn" type="submit">Ingresar</button>
+    </form>
+
+    <p class="hint">
+      Sistema simulado — solo correos institucionales
+    </p>
+  </div>
 </div>
 
 <script src="app.js"></script>
