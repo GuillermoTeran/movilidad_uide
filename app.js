@@ -15,10 +15,54 @@ const requestsList = $("requests-list");
 const confirmationsBox = $("confirmations");
 const confirmationsList = $("confirmations-list");
 
+// ---------- LOGIN ----------
+const btnRegister = $("btn-register");
+const modal = $("modal");
+const modalClose = $("modal-close");
+const registerForm = $("register-form");
+const currentUserBox = $("current-user");
+
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+renderCurrentUser();
+
 // ---------- STORAGE ----------
 let offers = JSON.parse(localStorage.getItem("offers")) || [];
 let requests = JSON.parse(localStorage.getItem("requests")) || [];
 let confirmations = JSON.parse(localStorage.getItem("confirmations")) || [];
+
+// ---------- LOGIN LOGIC ----------
+btnRegister.onclick = () => {
+  modal.classList.remove("hidden");
+};
+
+modalClose.onclick = () => {
+  modal.classList.add("hidden");
+};
+
+registerForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const email = registerForm.email.value.trim();
+
+  if (!email.endsWith("@uide.edu.ec")) {
+    alert("⚠️ Usa tu correo institucional @uide.edu.ec");
+    return;
+  }
+
+  currentUser = { email };
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+  renderCurrentUser();
+  modal.classList.add("hidden");
+  registerForm.reset();
+});
+
+function renderCurrentUser() {
+  if (currentUser) {
+    currentUserBox.textContent = `Conectado: ${currentUser.email}`;
+    btnRegister.textContent = "Cuenta";
+  }
+}
 
 // ---------- VISIBILIDAD ----------
 btnOfrezco.onclick = () => {
@@ -31,80 +75,74 @@ btnBusco.onclick = () => {
   formOfrezcoBox.classList.add("hidden");
 };
 
-// ---------- SUBMIT OFREZCO ----------
+// ---------- SUBMIT ----------
 ofrezcoForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
   const data = Object.fromEntries(new FormData(ofrezcoForm));
   data.id = Date.now();
-
   offers.push(data);
-  localStorage.setItem("offers", JSON.stringify(offers));
-
+  saveAll();
   ofrezcoForm.reset();
   formOfrezcoBox.classList.add("hidden");
-  renderOffers();
 });
 
-// ---------- SUBMIT BUSCO ----------
 buscoForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
   const data = Object.fromEntries(new FormData(buscoForm));
   data.id = Date.now();
-
   requests.push(data);
-  localStorage.setItem("requests", JSON.stringify(requests));
-
+  saveAll();
   buscoForm.reset();
   formBuscoBox.classList.add("hidden");
-  renderRequests();
 });
 
 // ---------- RENDER ----------
 function renderOffers() {
   offersList.innerHTML = "";
-  offers.forEach((o) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${o.fullname}</strong>
-      <span class="meta">${o.career} · ${o.age} años</span>
-      <span>${o.message}</span>
-      <span><b>💵 $${o.price}</b></span>
-      <div class="actions">
-        <button class="btn" onclick="acceptOffer(${o.id})">Aceptar</button>
-        <button class="btn secondary" onclick="removeOffer(${o.id})">Cancelar</button>
-      </div>
+  offers.forEach(o => {
+    offersList.innerHTML += `
+      <li>
+        <strong>${o.fullname}</strong>
+        <span>${o.message}</span>
+        <span><b>💵 $${o.price}</b></span>
+        <div class="actions">
+          <button class="btn" onclick="acceptOffer(${o.id})">Aceptar</button>
+          <button class="btn secondary" onclick="removeOffer(${o.id})">Cancelar</button>
+        </div>
+      </li>
     `;
-    offersList.appendChild(li);
   });
 }
 
 function renderRequests() {
   requestsList.innerHTML = "";
-  requests.forEach((r) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${r.fullname}</strong>
-      <span class="meta">${r.career} · ${r.age} años</span>
-      <span>${r.message}</span>
-      <span><b>💵 $${r.price}</b></span>
-      <div class="actions">
-        <button class="btn" onclick="acceptRequest(${r.id})">Aceptar</button>
-        <button class="btn secondary" onclick="removeRequest(${r.id})">Cancelar</button>
-      </div>
+  requests.forEach(r => {
+    requestsList.innerHTML += `
+      <li>
+        <strong>${r.fullname}</strong>
+        <span>${r.message}</span>
+        <span><b>💵 $${r.price}</b></span>
+        <div class="actions">
+          <button class="btn" onclick="acceptRequest(${r.id})">Aceptar</button>
+          <button class="btn secondary" onclick="removeRequest(${r.id})">Cancelar</button>
+        </div>
+      </li>
     `;
-    requestsList.appendChild(li);
   });
 }
 
 // ---------- ACEPTAR ----------
 window.acceptOffer = (id) => {
+  if (!currentUser) {
+    alert("⚠️ Debes iniciar sesión con tu correo UIDE");
+    return;
+  }
+
   const offer = offers.find(o => o.id === id);
 
   confirmations.push({
     conductor: offer.fullname,
-    pasajero: "Pasajero UIDE",
+    pasajero: currentUser.email,
     precio: offer.price
   });
 
@@ -113,10 +151,15 @@ window.acceptOffer = (id) => {
 };
 
 window.acceptRequest = (id) => {
+  if (!currentUser) {
+    alert("⚠️ Debes iniciar sesión con tu correo UIDE");
+    return;
+  }
+
   const req = requests.find(r => r.id === id);
 
   confirmations.push({
-    conductor: "Conductor UIDE",
+    conductor: currentUser.email,
     pasajero: req.fullname,
     precio: req.price
   });
@@ -127,28 +170,30 @@ window.acceptRequest = (id) => {
 
 // ---------- CONFIRMACIONES ----------
 function renderConfirmations() {
+  if (confirmations.length === 0) return;
+
   confirmationsBox.classList.remove("hidden");
   confirmationsList.innerHTML = "";
 
   confirmations.forEach(c => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>✅ Viaje confirmado</strong>
-      <span>🚗 ${c.conductor}</span>
-      <span>🧍 ${c.pasajero}</span>
-      <span><b>💵 $${c.precio}</b></span>
+    confirmationsList.innerHTML += `
+      <li>
+        <strong>✅ Viaje confirmado</strong>
+        <span>🚗 Conductor: ${c.conductor}</span>
+        <span>🧍 Pasajero: ${c.pasajero}</span>
+        <span><b>💵 $${c.precio}</b></span>
+      </li>
     `;
-    confirmationsList.appendChild(li);
   });
 }
 
 // ---------- REMOVE ----------
-window.removeOffer = (id) => {
+window.removeOffer = id => {
   offers = offers.filter(o => o.id !== id);
   saveAll();
 };
 
-window.removeRequest = (id) => {
+window.removeRequest = id => {
   requests = requests.filter(r => r.id !== id);
   saveAll();
 };
