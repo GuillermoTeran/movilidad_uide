@@ -15,55 +15,10 @@ const requestsList = $("requests-list");
 const confirmationsBox = $("confirmations");
 const confirmationsList = $("confirmations-list");
 
-// ---------- MODAL LOGIN ----------
-const btnRegister = $("btn-register");
-const modal = $("modal");
-const modalClose = $("modal-close");
-const registerForm = $("register-form");
-const currentUserBox = $("current-user");
-
-// ---------- USUARIO ----------
-let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
-renderCurrentUser();
-
 // ---------- STORAGE ----------
 let offers = JSON.parse(localStorage.getItem("offers")) || [];
 let requests = JSON.parse(localStorage.getItem("requests")) || [];
 let confirmations = JSON.parse(localStorage.getItem("confirmations")) || [];
-
-// ---------- LOGIN ----------
-btnRegister.onclick = () => {
-  modal.classList.remove("hidden");
-};
-
-modalClose.onclick = () => {
-  modal.classList.add("hidden");
-};
-
-registerForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = registerForm.email.value.trim();
-
-  if (!email.endsWith("@uide.edu.ec")) {
-    alert("⚠️ Usa tu correo institucional @uide.edu.ec");
-    return;
-  }
-
-  currentUser = { email, at: Date.now() };
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-  alert("✅ Registro simulado exitoso");
-  renderCurrentUser();
-  modal.classList.add("hidden");
-  registerForm.reset();
-});
-
-function renderCurrentUser() {
-  if (currentUser) {
-    currentUserBox.textContent = `Conectado: ${currentUser.email}`;
-    btnRegister.textContent = "Cuenta";
-  }
-}
 
 // ---------- VISIBILIDAD ----------
 btnOfrezco.onclick = () => {
@@ -79,10 +34,13 @@ btnBusco.onclick = () => {
 // ---------- SUBMIT OFREZCO ----------
 ofrezcoForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
   const data = Object.fromEntries(new FormData(ofrezcoForm));
   data.id = Date.now();
+
   offers.push(data);
   localStorage.setItem("offers", JSON.stringify(offers));
+
   ofrezcoForm.reset();
   formOfrezcoBox.classList.add("hidden");
   renderOffers();
@@ -91,10 +49,13 @@ ofrezcoForm.addEventListener("submit", (e) => {
 // ---------- SUBMIT BUSCO ----------
 buscoForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
   const data = Object.fromEntries(new FormData(buscoForm));
   data.id = Date.now();
+
   requests.push(data);
   localStorage.setItem("requests", JSON.stringify(requests));
+
   buscoForm.reset();
   formBuscoBox.classList.add("hidden");
   renderRequests();
@@ -139,15 +100,11 @@ function renderRequests() {
 
 // ---------- ACEPTAR ----------
 window.acceptOffer = (id) => {
-  if (!currentUser) {
-    alert("⚠️ Debes iniciar sesión con tu correo UIDE");
-    return;
-  }
-
   const offer = offers.find(o => o.id === id);
+
   confirmations.push({
     conductor: offer.fullname,
-    pasajero: currentUser.email,
+    pasajero: "Pasajero UIDE",
     precio: offer.price
   });
 
@@ -156,14 +113,10 @@ window.acceptOffer = (id) => {
 };
 
 window.acceptRequest = (id) => {
-  if (!currentUser) {
-    alert("⚠️ Debes iniciar sesión con tu correo UIDE");
-    return;
-  }
-
   const req = requests.find(r => r.id === id);
+
   confirmations.push({
-    conductor: currentUser.email,
+    conductor: "Conductor UIDE",
     pasajero: req.fullname,
     precio: req.price
   });
@@ -176,6 +129,7 @@ window.acceptRequest = (id) => {
 function renderConfirmations() {
   confirmationsBox.classList.remove("hidden");
   confirmationsList.innerHTML = "";
+
   confirmations.forEach(c => {
     const li = document.createElement("li");
     li.innerHTML = `
