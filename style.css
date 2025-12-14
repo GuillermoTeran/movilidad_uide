@@ -37,6 +37,7 @@ body{
   inset:0;
   background:rgba(0,0,0,0.45);
   backdrop-filter:blur(6px);
+  pointer-events:none;
 }
 
 /* LEFT RAIL */
@@ -113,3 +114,13 @@ body{
   border:none;
   font-size:18px;
 }
+
+.left-rail{
+  pointer-events:auto;
+}
+
+.rail-btn{
+  pointer-events:auto;
+}
+
+
