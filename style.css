@@ -60,6 +60,7 @@ body{
   background:url("image.jpg") center / cover no-repeat;
   position:relative;
   z-index:1;
+  pointer-events:none; /* 🔑 CLAVE */
 }
 
 .hero-bg::before{
@@ -213,3 +214,14 @@ input, textarea{
   margin-top:10px;
   text-align:center;
 }
+
+/* 🔐 REFUERZO DEFINITIVO DE INTERACCIÓN */
+.topbar,
+.left-rail,
+.main{
+  position:relative;
+  z-index:10;
+  pointer-events:auto;
+}
+
+
