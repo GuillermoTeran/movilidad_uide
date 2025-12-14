@@ -16,11 +16,31 @@ body{
   color:var(--text);
 }
 
+/* HERO VISUAL (FONDO PURO) */
+.hero-bg{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:65vh;
+  background:url("image.jpg") center / cover no-repeat;
+  z-index:0;
+  pointer-events:none;
+}
+
+.hero-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  backdrop-filter:blur(6px);
+  background:rgba(0,0,0,0.45);
+}
+
 /* TOP BAR */
 .topbar{
   position:sticky;
   top:0;
-  z-index:10;
+  z-index:20;
   display:flex;
   justify-content:flex-end;
   align-items:center;
@@ -46,7 +66,10 @@ body{
   cursor:pointer;
 }
 
-.btn.small{ font-size:14px; padding:8px 12px; }
+.btn.small{
+  padding:8px 12px;
+  font-size:14px;
+}
 
 .btn.secondary{
   background:transparent;
@@ -54,30 +77,12 @@ body{
   border:1px solid var(--red);
 }
 
-/* HERO VISUAL */
-.hero-bg{
-  height:65vh;
-  background:url("image.jpg") center / cover no-repeat;
-  position:relative;
-  z-index:1;
-  pointer-events:none; /* 🔑 CLAVE */
-}
-
-.hero-bg::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  backdrop-filter:blur(6px);
-  background:rgba(0,0,0,0.45);
-  pointer-events:none;
-}
-
 /* LEFT RAIL */
 .left-rail{
   position:fixed;
-  left:12px;
-  top:140px;
-  z-index:5;
+  left:16px;
+  top:160px;
+  z-index:20;
   display:flex;
   flex-direction:column;
   gap:12px;
@@ -101,7 +106,7 @@ body{
   margin:0 auto;
   padding:24px 14px;
   position:relative;
-  z-index:5;
+  z-index:20;
 }
 
 /* CARDS */
@@ -186,7 +191,7 @@ input, textarea{
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:20;
+  z-index:30;
 }
 
 .modal-content{
@@ -214,14 +219,3 @@ input, textarea{
   margin-top:10px;
   text-align:center;
 }
-
-/* 🔐 REFUERZO DEFINITIVO DE INTERACCIÓN */
-.topbar,
-.left-rail,
-.main{
-  position:relative;
-  z-index:10;
-  pointer-events:auto;
-}
-
-
