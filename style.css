@@ -94,6 +94,13 @@ body{
   inset:0;
   backdrop-filter:blur(6px);
   background:rgba(0,0,0,0.45);
+  pointer-events:none; /* 🔑 PERMITE CLICS */
+}
+
+/* ✅ EXTRA DE SEGURIDAD */
+.hero-bg,
+.hero-overlay{
+  pointer-events:none;
 }
 
 .hero-overlay{
@@ -249,3 +256,4 @@ textarea{
   margin-top:10px;
   text-align:center;
 }
+
