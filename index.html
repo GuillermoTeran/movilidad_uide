@@ -2,121 +2,109 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>UIDE — Movilidad Estudiantil</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<div id="app">
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div></div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <button id="btn-register" class="btn small">Registrarse / Ingresar</button>
+  <span id="current-user" class="current-user"></span>
+</header>
 
-    <button id="btn-register" class="btn small">
-      Registrarse / Ingresar
-    </button>
-    <span id="current-user" class="current-user"></span>
-  </header>
+<!-- HERO VISUAL (SOLO IMAGEN) -->
+<div class="hero-bg"></div>
 
-  <!-- LEFT RAIL -->
-  <nav class="left-rail">
-    <button id="btn-ofrezco" class="rail-btn">Ofrezco viaje</button>
-    <button id="btn-busco" class="rail-btn">Busco viaje</button>
-  </nav>
+<!-- LEFT RAIL -->
+<nav class="left-rail">
+  <button id="btn-ofrezco" class="rail-btn">Ofrezco viaje</button>
+  <button id="btn-busco" class="rail-btn">Busco viaje</button>
+</nav>
 
-  <!-- HERO IMAGE -->
-  <section class="hero-bg">
-    <div class="hero-overlay">
-      <h2>Movilidad Estudiantil UIDE</h2>
-      <p>Comparte y encuentra viajes con compañeros de la universidad</p>
-    </div>
-  </section>
+<!-- MAIN -->
+<main class="main">
 
-  <!-- MAIN -->
-  <main class="main">
+  <!-- FORM AREA -->
+  <section class="form-area">
 
-    <!-- FORM AREA -->
-    <section class="form-area">
+    <!-- OFREZCO -->
+    <article id="form-ofrezco" class="card hidden">
+      <h3>Ofrezco viaje</h3>
+      <form id="ofrezco-form">
+        <input name="email" type="email" placeholder="correo@uide.edu.ec" required />
+        <input name="fullname" type="text" placeholder="Nombre y apellido" required />
+        <input name="age" type="number" placeholder="Edad" required />
+        <input name="career" type="text" placeholder="Carrera" required />
 
-      <!-- OFREZCO -->
-      <article id="form-ofrezco" class="card hidden">
-        <h3>Ofrezco viaje</h3>
-        <form id="ofrezco-form">
-          <input name="email" type="email" placeholder="correo@uide.edu.ec" required />
-          <input name="fullname" type="text" placeholder="Nombre y apellido" required />
-          <input name="age" type="number" placeholder="Edad" required />
-          <input name="career" type="text" placeholder="Carrera" required />
+        <fieldset class="car-fieldset">
+          <legend>Datos del vehículo</legend>
+          <input name="car_color" placeholder="Color" required />
+          <input name="car_plate" placeholder="Placa" required />
+          <input name="car_model" placeholder="Modelo" required />
+          <input name="car_registration" placeholder="Matrícula" required />
+          <input name="car_license" placeholder="Licencia" required />
+        </fieldset>
 
-          <fieldset class="car-fieldset">
-            <legend>Datos del vehículo</legend>
-            <input name="car_color" placeholder="Color" required />
-            <input name="car_plate" placeholder="Placa" required />
-            <input name="car_model" placeholder="Modelo" required />
-            <input name="car_registration" placeholder="Matrícula" required />
-            <input name="car_license" placeholder="Licencia" required />
-          </fieldset>
+        <textarea name="message" placeholder="Destino / horario"></textarea>
+        <input name="price" type="number" step="0.01" placeholder="Valor $" required />
 
-          <textarea name="message" placeholder="Destino / horario"></textarea>
-          <input name="price" type="number" step="0.01" placeholder="Valor $" required />
-
-          <div class="form-actions">
-            <button class="btn" type="submit">Publicar oferta</button>
-            <button class="btn secondary" type="button">Cancelar</button>
-          </div>
-        </form>
-      </article>
-
-      <!-- BUSCO -->
-      <article id="form-busco" class="card hidden">
-        <h3>Busco viaje</h3>
-        <form id="busco-form">
-          <input name="email" type="email" placeholder="correo@uide.edu.ec" required />
-          <input name="fullname" type="text" placeholder="Nombre y apellido" required />
-          <input name="age" type="number" placeholder="Edad" required />
-          <input name="career" type="text" placeholder="Carrera" required />
-          <textarea name="message" placeholder="Destino / horario"></textarea>
-          <input name="price" type="number" step="0.01" placeholder="Valor $" required />
-
-          <div class="form-actions">
-            <button class="btn" type="submit">Publicar búsqueda</button>
-            <button class="btn secondary" type="button">Cancelar</button>
-          </div>
-        </form>
-      </article>
-
-      <!-- LISTINGS -->
-      <article id="listings" class="card">
-        <h3>Viajes publicados</h3>
-
-        <div class="list-columns">
-          <div>
-            <h4>Ofertas</h4>
-            <ul id="offers-list" class="list"></ul>
-          </div>
-
-          <div>
-            <h4>Solicitudes</h4>
-            <ul id="requests-list" class="list"></ul>
-          </div>
+        <div class="form-actions">
+          <button class="btn" type="submit">Publicar oferta</button>
+          <button class="btn secondary" type="button">Cancelar</button>
         </div>
-      </article>
+      </form>
+    </article>
 
-      <!-- CONFIRMACIONES -->
-      <article id="confirmations" class="card hidden">
-        <h3>Viajes confirmados</h3>
-        <ul id="confirmations-list" class="list"></ul>
-      </article>
+    <!-- BUSCO -->
+    <article id="form-busco" class="card hidden">
+      <h3>Busco viaje</h3>
+      <form id="busco-form">
+        <input name="email" type="email" placeholder="correo@uide.edu.ec" required />
+        <input name="fullname" type="text" placeholder="Nombre y apellido" required />
+        <input name="age" type="number" placeholder="Edad" required />
+        <input name="career" type="text" placeholder="Carrera" required />
+        <textarea name="message" placeholder="Destino / horario"></textarea>
+        <input name="price" type="number" step="0.01" placeholder="Valor $" required />
 
-    </section>
-  </main>
+        <div class="form-actions">
+          <button class="btn" type="submit">Publicar búsqueda</button>
+          <button class="btn secondary" type="button">Cancelar</button>
+        </div>
+      </form>
+    </article>
 
-  <footer class="foot">
-    <small>Proyecto experimental — Datos simulados — UIDE</small>
-  </footer>
+    <!-- LISTINGS -->
+    <article id="listings" class="card">
+      <h3>Viajes publicados</h3>
 
-</div>
+      <div class="list-columns">
+        <div>
+          <h4>Ofertas</h4>
+          <ul id="offers-list" class="list"></ul>
+        </div>
+
+        <div>
+          <h4>Solicitudes</h4>
+          <ul id="requests-list" class="list"></ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- CONFIRMACIONES -->
+    <article id="confirmations" class="card hidden">
+      <h3>Viajes confirmados</h3>
+      <ul id="confirmations-list" class="list"></ul>
+    </article>
+
+  </section>
+</main>
+
+<footer class="foot">
+  <small>Proyecto experimental — Datos simulados — UIDE</small>
+</footer>
 
 <!-- MODAL LOGIN -->
 <div id="modal" class="modal hidden">
