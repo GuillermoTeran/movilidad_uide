@@ -15,20 +15,26 @@
   <span id="current-user" class="current-user"></span>
 </header>
 
-<!-- HERO (IMAGEN PRINCIPAL) -->
-<section class="hero-bg"></section>
-
 <!-- BOTONES LATERALES -->
 <nav class="left-rail">
   <button id="btn-ofrezco" class="rail-btn">Ofrezco viaje</button>
   <button id="btn-busco" class="rail-btn">Busco viaje</button>
 </nav>
 
+<!-- HERO / IMAGEN -->
+<section class="hero-bg">
+  <div class="hero-overlay">
+    <h2>Movilidad Estudiantil UIDE</h2>
+    <p>Comparte y encuentra viajes con compañeros de la universidad</p>
+  </div>
+</section>
+
 <!-- CONTENIDO -->
 <main class="main">
 
   <section class="form-area">
 
+    <!-- OFREZCO -->
     <article id="form-ofrezco" class="card hidden">
       <h3>Ofrezco viaje</h3>
       <form id="ofrezco-form">
@@ -36,14 +42,26 @@
         <input name="fullname" type="text" placeholder="Nombre y apellido" required />
         <input name="age" type="number" placeholder="Edad" required />
         <input name="career" type="text" placeholder="Carrera" required />
+
+        <fieldset class="car-fieldset">
+          <legend>Datos del vehículo</legend>
+          <input name="car_color" placeholder="Color" required />
+          <input name="car_plate" placeholder="Placa" required />
+          <input name="car_model" placeholder="Modelo" required />
+          <input name="car_registration" placeholder="Matrícula" required />
+          <input name="car_license" placeholder="Licencia" required />
+        </fieldset>
+
         <textarea name="message" placeholder="Destino / horario"></textarea>
         <input name="price" type="number" step="0.01" placeholder="Valor $" required />
+
         <div class="form-actions">
           <button class="btn" type="submit">Publicar oferta</button>
         </div>
       </form>
     </article>
 
+    <!-- BUSCO -->
     <article id="form-busco" class="card hidden">
       <h3>Busco viaje</h3>
       <form id="busco-form">
@@ -53,13 +71,15 @@
         <input name="career" type="text" placeholder="Carrera" required />
         <textarea name="message" placeholder="Destino / horario"></textarea>
         <input name="price" type="number" step="0.01" placeholder="Valor $" required />
+
         <div class="form-actions">
           <button class="btn" type="submit">Publicar búsqueda</button>
         </div>
       </form>
     </article>
 
-    <article id="listings" class="card">
+    <!-- LISTADOS -->
+    <article class="card">
       <h3>Viajes publicados</h3>
       <div class="list-columns">
         <ul id="offers-list" class="list"></ul>
@@ -75,11 +95,7 @@
   </section>
 </main>
 
-<footer class="foot">
-  <small>Proyecto experimental — Datos simulados — UIDE</small>
-</footer>
-
-<!-- MODAL -->
+<!-- MODAL LOGIN -->
 <div id="modal" class="modal hidden">
   <div class="modal-content">
     <button id="modal-close" class="modal-close">✕</button>
@@ -88,6 +104,7 @@
       <input type="email" name="email" placeholder="correo@uide.edu.ec" required />
       <button class="btn" type="submit">Ingresar</button>
     </form>
+    <p class="hint">Sistema simulado — solo correos institucionales</p>
   </div>
 </div>
 
