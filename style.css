@@ -9,6 +9,7 @@
 
 /* RESET */
 *{ box-sizing:border-box }
+
 body{
   margin:0;
   font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
@@ -16,7 +17,9 @@ body{
   color:var(--text);
 }
 
-/* TOP BAR */
+/* =========================
+   TOP BAR
+========================= */
 .topbar{
   display:flex;
   justify-content:flex-end;
@@ -26,7 +29,7 @@ body{
   box-shadow:0 2px 10px rgba(0,0,0,0.06);
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:30; /* 🔑 siempre encima */
 }
 
 .current-user{
@@ -35,7 +38,9 @@ body{
   color:#444;
 }
 
-/* BUTTONS */
+/* =========================
+   BUTTONS
+========================= */
 .btn{
   background:var(--red);
   color:var(--yellow);
@@ -57,7 +62,9 @@ body{
   border:1px solid var(--red);
 }
 
-/* LEFT RAIL */
+/* =========================
+   LEFT RAIL (BOTONES LATERALES)
+========================= */
 .left-rail{
   position:fixed;
   left:12px;
@@ -65,7 +72,7 @@ body{
   display:flex;
   flex-direction:column;
   gap:12px;
-  z-index:30;
+  z-index:40; /* 🔑 MÁS ALTO QUE TODO */
 }
 
 .rail-btn{
@@ -80,7 +87,9 @@ body{
   cursor:pointer;
 }
 
-/* HERO TEXTO */
+/* =========================
+   HERO TEXTO (SIN IMAGEN)
+========================= */
 .hero-simple{
   min-height:60vh;
   display:flex;
@@ -90,6 +99,8 @@ body{
   text-align:center;
   padding:40px 20px;
   background:#ececec;
+  position:relative;
+  z-index:1; /* 🔑 siempre debajo */
 }
 
 .hero-simple h1{
@@ -104,7 +115,9 @@ body{
   max-width:700px;
 }
 
-/* MAIN */
+/* =========================
+   APP / MAIN
+========================= */
 #app{
   max-width:var(--max-width);
   margin:0 auto;
@@ -113,10 +126,12 @@ body{
 .main{
   padding:20px 14px;
   position:relative;
-  z-index:10;
+  z-index:10; /* 🔑 clics permitidos */
 }
 
-/* CARDS */
+/* =========================
+   CARDS
+========================= */
 .card{
   background:var(--card);
   padding:16px;
@@ -127,7 +142,9 @@ body{
 
 .hidden{ display:none }
 
-/* FORMS */
+/* =========================
+   FORMS
+========================= */
 form{
   display:flex;
   flex-direction:column;
@@ -154,7 +171,9 @@ textarea{ resize:vertical }
   gap:10px;
 }
 
-/* LISTS */
+/* =========================
+   LISTS
+========================= */
 .list-columns{
   display:flex;
   flex-direction:column;
@@ -176,14 +195,18 @@ textarea{ resize:vertical }
   border-bottom:1px solid #eee;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 .foot{
   text-align:center;
   padding:16px;
   color:#777;
 }
 
-/* MODAL */
+/* =========================
+   MODAL LOGIN
+========================= */
 .modal{
   position:fixed;
   inset:0;
@@ -191,7 +214,7 @@ textarea{ resize:vertical }
   align-items:center;
   justify-content:center;
   background:rgba(0,0,0,0.45);
-  z-index:50;
+  z-index:100; /* 🔑 el más alto */
 }
 
 .modal-content{
