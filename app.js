@@ -33,11 +33,15 @@ let confirmations = JSON.parse(localStorage.getItem("confirmations")) || [];
 // ---------- LOGIN LOGIC ----------
 btnRegister.onclick = () => {
   modal.classList.remove("hidden");
+  modal.style.display = "flex";
 };
 
-modalClose.onclick = () => {
+modalClose.onclick = closeModal;
+
+function closeModal() {
   modal.classList.add("hidden");
-};
+  modal.style.display = "none";
+}
 
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -53,8 +57,12 @@ registerForm.addEventListener("submit", (e) => {
   localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
   renderCurrentUser();
-  modal.classList.add("hidden");
+
+  // 🔑 CIERRE TOTAL DEL MODAL
+  closeModal();
   registerForm.reset();
+
+  console.log("✅ Usuario logueado:", email);
 });
 
 function renderCurrentUser() {
@@ -64,7 +72,7 @@ function renderCurrentUser() {
   }
 }
 
-// ---------- VISIBILIDAD ----------
+// ---------- VISIBILIDAD FORMULARIOS ----------
 btnOfrezco.onclick = () => {
   formOfrezcoBox.classList.remove("hidden");
   formBuscoBox.classList.add("hidden");
@@ -211,3 +219,4 @@ function saveAll() {
 renderOffers();
 renderRequests();
 renderConfirmations();
+
