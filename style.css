@@ -263,3 +263,8 @@ textarea{ resize:vertical }
 .left-rail{
   z-index: 9999;
 }
+
+/* Modal realmente oculto */
+.modal.hidden{
+  display: none !important;
+}
