@@ -29,6 +29,7 @@ body{
   height:65vh;
   background:url("image.jpg") center / cover no-repeat;
   position:relative;
+  z-index:0;          /* 🔑 FONDO REAL */
 }
 
 .hero-bg::before{
@@ -37,7 +38,7 @@ body{
   inset:0;
   background:rgba(0,0,0,0.45);
   backdrop-filter:blur(6px);
-  pointer-events:none;
+  pointer-events:none; /* 🔑 */
 }
 
 /* LEFT RAIL */
@@ -123,4 +124,14 @@ body{
   pointer-events:auto;
 }
 
+.topbar,
+.left-rail,
+.main{
+  position:relative;
+  z-index:10;
+}
 
+.left-rail,
+.rail-btn{
+  pointer-events:auto;
+}
