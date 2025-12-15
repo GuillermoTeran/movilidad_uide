@@ -242,3 +242,24 @@ textarea{ resize:vertical }
   margin-top:10px;
   text-align:center;
 }
+
+/* =========================
+   FIX DEFINITIVO DE CLICS
+========================= */
+
+/* Nada puede bloquear los botones laterales */
+.hero-simple,
+.hero-simple *{
+  pointer-events: none;
+}
+
+/* Los botones SIEMPRE reciben clics */
+.left-rail,
+.left-rail *{
+  pointer-events: auto;
+}
+
+/* Asegurar que estén por encima de todo */
+.left-rail{
+  z-index: 9999;
+}
